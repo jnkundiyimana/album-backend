@@ -18,11 +18,13 @@ db.sequelize.sync();
 // });
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "Welcome to Album management System." });
 });
 require("./app/routes/artist.routes")(app);
+require("./app/routes/album.routes")(app);
+require("./app/routes/track.routes")(app);
 // set port, listen for requests
-const PORT = process.env.PORT || 8082;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });

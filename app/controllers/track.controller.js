@@ -1,0 +1,88 @@
+const db = require("../models");
+const album = require("../models/album");
+const Track = db.tracks;
+const Album = db.albums;
+const Op = db.Sequelize.Op;
+// Create and Save a new Track
+exports.create = (req, res) => {
+  // Validate request
+  if (!req.body.trackName) {
+    res.status(400).send({
+      message: "trackName can not be empty!"
+    });
+    return;
+  }
+  // Create a Track
+  const track = {
+    trackName: req.body.trackName,
+    albumId: req.params.albumId,
+    trackNumber: req.body.trackNumber,
+  };
+  console.log("track:: ", track)
+  // Save Track in the database
+  Track.create(track)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Track."
+      });
+    });
+};
+// Retrieve all Tracks from the database.
+exports.findAll = (req, res) => {
+  const name = req.query.name;
+  var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+  Track.findAll({ where: condition })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Tracks."
+      });
+    });
+};
+
+// Find a single Track with an id
+exports.findOne = (req, res) => {
+  const id = req.params.id;
+  const albumId = req.params.albumId;
+
+  Track.findOne({ where: { 
+    albumId: { [Op.like]: `%${albumId}%` },
+    id: {[Op.like]: `%${id}%`}
+  },  include: ["album"]  })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Track with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Track with id=" + id
+      });
+    });
+};
+
+
+exports.getAlbumTracks =  async (req, res) => {
+  const id = req.params.albumId
+ // this.findOne(req, res)
+
+  const data = await Album.findOne({
+      include: [{
+          model: Track,
+          as: 'tracks'
+      }],
+      where: { id: id }
+  });
+  res.status(200).send(data)
+}

@@ -32,7 +32,7 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
   const name = req.query.name;
   var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
-  Artist.findAll({ where: condition })
+  Artist.findAll({})
     .then(data => {
       res.send(data);
     })
@@ -46,7 +46,7 @@ exports.findAll = (req, res) => {
 // Find a single Artist with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
-  Artist.findByPk(id)
+  Artist.findOne({ where: { id: id }})
     .then(data => {
       if (data) {
         res.send(data);
@@ -137,3 +137,20 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+
+// getArtistAlbums function temporarily commented out
+
+// exports.getArtistAlbums =  async (req, res) => {
+//   const id = req.params.artistId
+//  // this.findOne(req, res)
+
+//   const data = await Artist.findOne({
+//       include: [{
+//           model: Album,
+//           as: 'albums'
+//       }],
+//       where: { id: id }
+//   });
+
+//   res.status(200).send(data)
+// }

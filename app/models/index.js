@@ -15,36 +15,41 @@ const db = {};
 
 const Artist = require("./artist.js");
 const Album = require("./album.js");
+const Track = require("./track.js");
 
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
-db.artists = require("./artist.js")(sequelize, Sequelize);
-db.albums = require("./album.js")(sequelize, Sequelize);
+db.Sequelize = Sequelize
+db.sequelize = sequelize
+db.artists = require("./artist.js")(sequelize, Sequelize)
+db.albums = require("./album.js")(sequelize, Sequelize)
+db.tracks = require("./track.js")(sequelize, Sequelize)
 
- // Artist.hasMany(Album);
+// db.sequelize.sync({ force: false })
+// .then(() => {
+//     console.log('yes re-sync done!')
+// })
 
-// let customerId = null;
-// sequelize
-//   .sync({force: true})
-//   // .sync()
-//   .then((result) => {
-//     return Customer.create({name: "Chandler Bing", email: "cb@gmail.com"})
-//     console.log(result);
-//   })
-//   .then(customer => {
-//     customerId = customer.id;
-//     console.log("First Customer Created: ",customer);
-//     return customer.createOrder({total: 45});
-//   })
-//   .then(order => {
-//     console.log("Order is : ",order);
-//     return Order.findAll({ where: customerId});
-//   })
-//   .then(orders => {
-//     console.log("All the Orders are : ",orders);
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
+
+// oneToMany Relation
+db.artists.hasMany(db.albums, {
+  foreignKey: 'artistId',
+  as: 'albums'
+})
+
+db.albums.belongsTo(db.artists, {
+  foreignKey: 'artistId',
+  as: 'artist'
+})
+
+// oneToMany
+db.albums.hasMany(db.tracks, {
+  foreignKey: 'albumId',
+  as: 'tracks'
+})
+
+db.tracks.belongsTo(db.albums, {
+  foreignKey: 'albumId',
+  as: 'album'
+})
+
 
 module.exports = db;
