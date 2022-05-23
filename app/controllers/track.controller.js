@@ -52,10 +52,16 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
   const albumId = req.params.albumId;
 
-  Track.findOne({ where: { 
-    albumId: { [Op.like]: `%${albumId}%` },
-    id: {[Op.like]: `%${id}%`}
-  },  include: ["album"]  })
+  Track.findOne({ 
+    where: { 
+      albumId: { [Op.like]: `%${albumId}%` },
+      id: {[Op.like]: `%${id}%`}
+  },
+  include: [{
+    model: Album,
+    as: 'album',
+    include: ["artist"]
+  }]  })
     .then(data => {
       if (data) {
         res.send(data);
@@ -86,3 +92,49 @@ exports.getAlbumTracks =  async (req, res) => {
   });
   res.status(200).send(data)
 }
+
+
+// exports.findOne = async (req, res) => {
+//   const id = req.params.id;
+//   const albumId = req.params.albumId;
+
+//   const data = await Track.findOne({
+//       include: [{
+//           model: Album,
+//           as: 'album',
+//           include: ["artist"] 
+//       } ],
+//       where: { 
+//         albumId: { [Op.like]: `%${albumId}%` },
+//         id: {[Op.like]: `%${id}%`}
+//       }
+//   });
+//   res.status(200).send(data)
+// }
+
+
+// Find a single Track with an id
+
+exports.findByName = (req, res) => {
+  const trackName = req.query.trackName;
+  Track.findOne({ where: { trackName: trackName },
+    include: [{
+      model: Album,
+      as: 'album',
+      include: ["artist"]
+    }] })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Track with trackName=${trackName}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Track with id=" + trackName
+      });
+    });
+};

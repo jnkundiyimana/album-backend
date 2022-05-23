@@ -3,7 +3,8 @@ module.exports = app => {
 
   var router = require("express").Router();
 
-  // router.get("/:albumId/tracks/", tracllks.findAll);
+  // router.get("/", tracks.findAll);
+   router.get("/", tracks.findByName);
   
   app.use('/api/tracks', router);
 };
