@@ -4,7 +4,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Artist
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.firstName) {
+  if (!req.body.artistName) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -12,8 +12,7 @@ exports.create = (req, res) => {
   }
   // Create a Artist
   const artist = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
+    artistName: req.body.artistName,
     dateOfBirth: req.body.dateOfBirth
   };
   // Save Artist in the database
