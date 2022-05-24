@@ -1,23 +1,18 @@
 module.exports = (sequelize, Sequelize) => {
-    const Album = sequelize.define("album", {
+    const Track = sequelize.define("track", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
       },
-      title: {
+      trackName: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      numberOfTracks: {
+      trackNumber: {
         type: Sequelize.INTEGER
-      },
-      artistId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        Key: true
-      },
+      }
     });
-    return Album;
+    return Track;
   };

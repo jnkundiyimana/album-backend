@@ -1,7 +1,7 @@
 {
   "name": "album-backend",
   "version": "1.0.0",
-  "description": "Node.js Rest Apis with Express, Sequelize & MySQL",
+  "description": "Album management system",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -19,7 +19,7 @@
     "rest",
     "api"
   ],
-  "author": "Team16",
+  "author": "Team 16",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jnkundiyimana/album-backend/issues"
