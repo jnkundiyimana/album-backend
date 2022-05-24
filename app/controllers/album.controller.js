@@ -15,6 +15,7 @@ exports.create = (req, res) => {
   const album = {
     title: req.body.title,
     artistId: req.body.artistId,
+    numberOfTracks: req.body.numberOfTracks
   };
   // Save Album in the database
   Album.create(album)
