@@ -13,7 +13,7 @@ router.post('/:albumId/tracks/', tracks.create);
 // router.get("/:albumId/tracks/", tracks.findAll);
 router.get("/:albumId/tracks/:id", tracks.findOne);
 router.get("/:albumId/tracks/", tracks.getAlbumTracks);
-router.put('/:albumId', albums.editAlbumName);
+router.put('/:albumId', albums.editAlbumTitle);
 
   app.use('/api/albums', router);
 };

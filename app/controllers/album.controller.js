@@ -62,10 +62,10 @@ function getSingleAlbum(id) {
 }
 
 //update album name
-exports.editAlbumName = async (req, res) => {
+exports.editAlbumTitle = async (req, res) => {
   if(!req.body.title){
     res.status(400).send({
-      message: 'Album name can not be empty!!'
+      message: 'Album Title can not be empty!!'
     })
     return;
   }
@@ -75,11 +75,11 @@ exports.editAlbumName = async (req, res) => {
       Album.update(req.body, {where: {id: id }}).then(num => {
         if(num == 1){
           res.send({
-            message: 'Album name updated successfully.'
+            message: 'Album Title updated successfully.'
           });
         }else{
           res.send({
-            message: `Cannot update Artist with id=${req.params.albumId}`
+            message: `Cannot update Album with id=${req.params.albumId}`
           })
         }
       }).catch(err =>{
