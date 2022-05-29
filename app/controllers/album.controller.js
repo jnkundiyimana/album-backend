@@ -66,6 +66,7 @@ exports.editAlbumTitle = async (req, res) => {
   if(!req.body.title){
     res.status(400).send({
       message: 'Album Title can not be empty!!'
+
     })
     return;
   }
@@ -75,11 +76,13 @@ exports.editAlbumTitle = async (req, res) => {
       Album.update(req.body, {where: {id: id }}).then(num => {
         if(num == 1){
           res.send({
+
             message: 'Album Title updated successfully.'
           });
         }else{
           res.send({
             message: `Cannot update Album with id=${req.params.albumId}`
+
           })
         }
       }).catch(err =>{
