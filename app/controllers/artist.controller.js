@@ -63,14 +63,20 @@ exports.findOne = (req, res) => {
 };
 // Update a Artist by the id in the request
 exports.update = (req, res) => {
+  if(!req.body.artistName){
+    res.status(400).send({
+      message: 'Artist name can not be empty!!'
+    });
+    return;
+  }
   const id = req.params.id;
   Artist.update(req.body, {
-    where: { id: id }
+    where: { id: id }    
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Artist was updated successfully."
+          message: "Artist name was updated successfully."
         });
       } else {
         res.send({
