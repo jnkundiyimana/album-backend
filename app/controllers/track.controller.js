@@ -3,6 +3,7 @@ const album = require("../models/album");
 const Track = db.tracks;
 const Album = db.albums;
 const Op = db.Sequelize.Op;
+
 // Create and Save a new Track
 exports.create = (req, res) => {
   // Validate request
@@ -93,28 +94,7 @@ exports.getAlbumTracks =  async (req, res) => {
   res.status(200).send(data)
 }
 
-
-// exports.findOne = async (req, res) => {
-//   const id = req.params.id;
-//   const albumId = req.params.albumId;
-
-//   const data = await Track.findOne({
-//       include: [{
-//           model: Album,
-//           as: 'album',
-//           include: ["artist"] 
-//       } ],
-//       where: { 
-//         albumId: { [Op.like]: `%${albumId}%` },
-//         id: {[Op.like]: `%${id}%`}
-//       }
-//   });
-//   res.status(200).send(data)
-// }
-
-
 // Find a single Track with an id
-
 exports.findByName = (req, res) => {
   const trackName = req.query.trackName;
   Track.findOne({ where: { trackName: trackName },
@@ -138,3 +118,34 @@ exports.findByName = (req, res) => {
       });
     });
 };
+
+//update Track name
+exports.update = async (req, res) => {
+  if(!req.body.trackName){
+    res.status(400).send({
+      message: 'trackName can not be empty!!'
+    })
+    return;
+  }
+
+  const id = req.params.id;
+  const albumId = req.params.albumId;
+  Track.update(req.body, {where: { 
+    albumId: { [Op.like]: `%${albumId}%` },
+    id: {[Op.like]: `%${id}%`}
+    }}).then(num => {
+        if(num == 1){
+          res.send({
+            message: 'Track name updated successfully.'
+          });
+        }else{
+          res.send({
+            message: `Cannot update Track with id=${req.params.trackId}`
+          })
+        }
+      }).catch(err =>{
+        res.status(500).send({
+          message: err.message + 'with id: ' + req.params.trackId
+        })
+      })
+  }
