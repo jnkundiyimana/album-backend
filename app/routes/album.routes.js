@@ -10,6 +10,7 @@ router.get("/", albums.findAll);
 router.get("/:id", albums.findOne);
 
 router.post('/:albumId/tracks/', tracks.create);
+router.put('/:albumId/tracks/:id', tracks.update);
 // router.get("/:albumId/tracks/", tracks.findAll);
 router.get("/:albumId/tracks/:id", tracks.findOne);
 router.get("/:albumId/tracks/", tracks.getAlbumTracks);
