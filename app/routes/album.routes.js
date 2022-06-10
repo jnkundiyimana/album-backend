@@ -14,7 +14,7 @@ router.put('/:albumId/tracks/:id', tracks.update);
 // router.get("/:albumId/tracks/", tracks.findAll);
 router.get("/:albumId/tracks/:id", tracks.findOne);
 router.get("/:albumId/tracks/", tracks.getAlbumTracks);
-router.put('/:albumId', albums.editAlbumTitle);
+router.put('/:albumId', albums.update);
 
 
   app.use('/api/albums', router);

@@ -61,11 +61,11 @@ function getSingleAlbum(id) {
   return  Album.findByPk(id, { include: ["artist"] })
 }
 
-//update album name
-exports.editAlbumTitle = async (req, res) => {
-  if(!req.body.title){
+//update album
+exports.update = async (req, res) => {
+  if(!req.params.albumId){
     res.status(400).send({
-      message: 'Album Title can not be empty!!'
+      message: 'albumId can not be empty!!'
 
     })
     return;
