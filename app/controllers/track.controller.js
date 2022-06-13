@@ -5,7 +5,7 @@ const Album = db.albums;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Track
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   // Validate request
   if (!req.body.trackName) {
     res.status(400).send({
@@ -31,6 +31,7 @@ exports.create = (req, res) => {
           err.message || "Some error occurred while creating the Track."
       });
     });
+    getNumberOfTracks(req, "create");
 };
 // Retrieve all Tracks from the database.
 exports.findAll = (req, res) => {
@@ -79,21 +80,6 @@ exports.findOne = (req, res) => {
     });
 };
 
-
-exports.getAlbumTracks =  async (req, res) => {
-  const id = req.params.albumId
- // this.findOne(req, res)
-
-  const data = await Album.findOne({
-      include: [{
-          model: Track,
-          as: 'tracks'
-      }],
-      where: { id: id }
-  });
-  res.status(200).send(data)
-}
-
 // Find a single Track with an id
 exports.findByName = (req, res) => {
   const trackName = req.query.trackName;
@@ -119,7 +105,7 @@ exports.findByName = (req, res) => {
     });
 };
 
-//update Track name
+//update Track
 exports.update = async (req, res) => {
   if(!req.body.trackName){
     res.status(400).send({
@@ -136,7 +122,7 @@ exports.update = async (req, res) => {
     }}).then(num => {
         if(num == 1){
           res.send({
-            message: 'Track name updated successfully.'
+            message: 'Track updated successfully.'
           });
         }else{
           res.send({
@@ -149,3 +135,58 @@ exports.update = async (req, res) => {
         })
       })
   }
+
+// Delete a Track from specific album
+exports.delete = async (req, res) => {
+  const id = req.params.id;
+  const albumId = req.params.albumId;
+  Track.destroy({
+    where: { 
+      albumId: { [Op.like]: `%${albumId}%` },
+      id: {[Op.like]: `%${id}%`}
+      }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Track was deleted successfully!"
+        });
+      } else {
+        res.send({
+          message: `Cannot delete Track with id=${id}, for Album with albumId=${albumId}. Maybe Track was not found!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Could not delete Track with id=" + id
+      });
+    });
+    getNumberOfTracks(req, "");
+}
+
+function updateNumberOfTracks(album) {
+  return Album.update(album, {where: {id: album.id }});
+}
+
+function getNumberOfTracks(req, meth) {
+  const numberOfTracks = Track.count({
+        where: { albumId: req.params.albumId },
+      });
+      
+      numberOfTracks.then(function(result) {
+        let album; 
+        if (meth === "create") {
+          album = {
+            id: req.params.albumId,
+            numberOfTracks: result+1,
+          };
+        } else {
+          album = {
+            id: req.params.albumId,
+            numberOfTracks: result-1,
+          };
+        }
+         updateNumberOfTracks(album);
+      }) 
+    }
