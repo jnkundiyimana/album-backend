@@ -131,21 +131,21 @@ exports.getAlbumTracks =  async (req, res) => {
   res.status(200).send(data)
 }
 
-// exports.findByTitle = (req, res) => {
-//   const title = req.params.title;
-//   Album.findOne({ where: { title: { [Op.like]: `%${title}%` } } })
-//     .then(data => {
-//       if (data) {
-//         res.send(data);
-//       } else {
-//         res.status(404).send({
-//           message: `Cannot find Album with title=${title}.`
-//         });
-//       }
-//     })
-//     .catch(err => {
-//       res.status(500).send({
-//         message: "Error retrieving Album with title=" + title
-//       });
-//     });
-// }
+exports.findByTitle = (req, res) => {
+  const title = req.params.title;
+  Album.findOne({ where: { title: { [Op.like]: `%${title}%` } } })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Album with title=${title}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Album with title=" + title
+      });
+    });
+}
