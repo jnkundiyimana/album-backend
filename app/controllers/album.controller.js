@@ -133,8 +133,9 @@ exports.getAlbumTracks =  async (req, res) => {
 
 exports.findByTitle = (req, res) => {
   const title = req.params.title;
-  Album.findOne({ where: { title: { [Op.like]: `%${title}%` } } })
+  Album.findAll({ where: { title: { [Op.like]: `%${title}%` } } })
     .then(data => {
+      console.log(data)
       if (data) {
         res.send(data);
       } else {
