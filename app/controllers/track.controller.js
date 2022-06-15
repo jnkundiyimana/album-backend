@@ -184,7 +184,7 @@ function getNumberOfTracks(req, meth) {
         } else {
           album = {
             id: req.params.albumId,
-            numberOfTracks: result-1,
+            numberOfTracks: result-1 < 0 ? 0: result-1,
           };
         }
          updateNumberOfTracks(album);

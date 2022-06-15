@@ -10,7 +10,6 @@ router.get("/", albums.findAll);
 router.get("/:id", albums.findOne);
 router.delete("/:id", albums.delete);
 router.get("/search/:title", albums.findByTitle);
-
 router.post('/:albumId/tracks/', tracks.create);
 router.put('/:albumId/tracks/:id', tracks.update);
 router.delete('/:albumId/tracks/:id', tracks.delete);
