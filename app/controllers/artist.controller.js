@@ -1,6 +1,9 @@
 const db = require("../models");
 const Artist = db.artists;
+const Album = db.albums;
 const Op = db.Sequelize.Op;
+
+
 // Create and Save a new Artist
 exports.create = (req, res) => {
   // Validate request
@@ -97,6 +100,7 @@ exports.delete = (req, res) => {
     where: { id: id }
   })
     .then(num => {
+      console.log('this is a number:', num);
       if (num == 1) {
         res.send({
           message: "Artist was deleted successfully!"
@@ -113,25 +117,10 @@ exports.delete = (req, res) => {
       });
     });
 };
-// Delete all Artists from the database.
-exports.deleteAll = (req, res) => {
-  Artist.destroy({
-    where: {},
-    truncate: false
-  })
-    .then(nums => {
-      res.send({ message: `${nums} Artists were deleted successfully!` });
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while removing all Artists."
-      });
-    });
-};
+
 // Find all published Artist
 exports.findAllPublished = (req, res) => {
-  Artist.findAll({ where: { published: true } })
+  Artist.findAll()
     .then(data => {
       res.send(data);
     })
@@ -143,19 +132,14 @@ exports.findAllPublished = (req, res) => {
     });
 };
 
-// getArtistAlbums function temporarily commented out
-
-// exports.getArtistAlbums =  async (req, res) => {
-//   const id = req.params.artistId
-//  // this.findOne(req, res)
-
-//   const data = await Artist.findOne({
-//       include: [{
-//           model: Album,
-//           as: 'albums'
-//       }],
-//       where: { id: id }
-//   });
-
-//   res.status(200).send(data)
-// }
+//retrieve all albums for current artist
+exports.getArtistAlbums =  async (req, res) => {
+  const id = req.params.artistId
+  await Album.findAll({where: {artistId: id}}).then(data => {
+    res.send(data);
+  }).catch(err => {
+    res.status(500).send({
+      message: err.message || 'Some error occured while retrieving Artists.'
+    })
+  });
+}
