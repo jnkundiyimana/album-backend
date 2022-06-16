@@ -8,6 +8,7 @@ module.exports = app => {
 router.post('/', albums.create);
 router.get("/", albums.findAll);
 router.get("/:id", albums.findOne);
+router.delete("/", albums.deleteAll);
 router.delete("/:id", albums.delete);
 router.get("/search/:title", albums.findByTitle);
 router.post('/:albumId/tracks/', tracks.create);
