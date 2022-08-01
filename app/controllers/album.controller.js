@@ -119,6 +119,22 @@ exports.delete = (req, res) => {
     });
 };
 
+exports.deleteAll = (req, res) => {
+  Album.destroy({
+    where: {},
+    truncate: false
+  })
+    .then(nums => {
+      res.send({ message: `${nums} Albums were deleted successfully!` });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while removing all albums."
+      });
+    });
+};
+
 exports.getAlbumTracks =  async (req, res) => {
   const id = req.params.albumId  
   const data = await Album.findOne({
